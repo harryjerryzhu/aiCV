@@ -1,0 +1,5 @@
+{
+  "name": "aiCV",
+  "description": "A split-screen resume builder where Gemini AI transforms your rough notes into a professional curriculum vitae in real-time.",
+  "requestFramePermissions": []
+}
