@@ -109,14 +109,21 @@ ${JSON.stringify(dataForAI)}
   try {
     console.log("Sending request to NVIDIA API...");
     console.log("Model: z-ai/glm4.7");
-    console.log("Base URL: https://integrate.api.nvidia.com/v1");
 
-    // Use Vite proxy to avoid CORS issues
-    const response = await fetch("/api/nvidia/v1/chat/completions", {
+    // Use different endpoints for dev (Vite proxy) vs production (Vercel serverless function)
+    const isDev = import.meta.env.DEV;
+    const apiEndpoint = isDev
+      ? "/api/nvidia/v1/chat/completions"  // Vite proxy in development
+      : "/api/nvidia";                      // Vercel serverless function in production
+
+    console.log("Environment:", isDev ? "development" : "production");
+    console.log("API Endpoint:", apiEndpoint);
+
+    const response = await fetch(apiEndpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${apiKey}`,
+        ...(isDev && { "Authorization": `Bearer ${apiKey}` }), // Only send auth header in dev
       },
       body: JSON.stringify({
         model: "z-ai/glm4.7",
