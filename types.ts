@@ -48,6 +48,7 @@ export interface CVData {
   linkedin: string;
   website: string;
   photoUrl?: string; // Optional profile photo data URL
+  headline: string; // Job title / headline
   summary: string;
   skills: string; // Stored as comma separated string for easy editing
   interests: string; // Stored as comma separated string
@@ -69,6 +70,7 @@ export const INITIAL_CV_DATA: CVData = {
   linkedin: "",
   website: "",
   photoUrl: "",
+  headline: "",
   summary: "",
   skills: "",
   interests: "",

@@ -10,7 +10,7 @@ interface CVFormProps {
 }
 
 export const CVForm: React.FC<CVFormProps> = ({ data, onChange, onGenerate, isGenerating }) => {
-  
+
   const updateField = (field: keyof CVData, value: string) => {
     onChange({ ...data, [field]: value });
   };
@@ -125,16 +125,15 @@ export const CVForm: React.FC<CVFormProps> = ({ data, onChange, onGenerate, isGe
       <div className="bg-indigo-50 p-4 rounded-lg border border-indigo-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-lg font-semibold text-indigo-900">Content Editor</h2>
-          <p className="text-sm text-indigo-700">Fill in your details, then let Gemini polish it.</p>
+          <p className="text-sm text-indigo-700">Fill in your details, then let NVIDIA AI polish it.</p>
         </div>
         <button
           onClick={onGenerate}
           disabled={isGenerating}
-          className={`flex items-center gap-2 px-4 py-2 rounded-md text-white font-medium transition-all ${
-            isGenerating 
-              ? 'bg-indigo-400 cursor-not-allowed' 
-              : 'bg-indigo-600 hover:bg-indigo-700 shadow-sm hover:shadow-md'
-          }`}
+          className={`flex items-center gap-2 px-4 py-2 rounded-md text-white font-medium transition-all ${isGenerating
+            ? 'bg-indigo-400 cursor-not-allowed'
+            : 'bg-indigo-600 hover:bg-indigo-700 shadow-sm hover:shadow-md'
+            }`}
         >
           <Wand2 size={18} className={isGenerating ? "animate-spin" : ""} />
           {isGenerating ? 'Polishing...' : 'Polish with AI'}
@@ -144,83 +143,83 @@ export const CVForm: React.FC<CVFormProps> = ({ data, onChange, onGenerate, isGe
       {/* Target Role & Company */}
       <section className="space-y-4">
         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-xl border border-blue-100 shadow-sm">
-            <div className="flex items-center gap-2 mb-2 text-indigo-900 font-bold text-lg">
-                <Target size={20} className="text-indigo-600"/> 
-                <h3>Target Role & Company</h3>
+          <div className="flex items-center gap-2 mb-2 text-indigo-900 font-bold text-lg">
+            <Target size={20} className="text-indigo-600" />
+            <h3>Target Role & Company</h3>
+          </div>
+          <p className="text-xs text-indigo-600 mb-4 leading-relaxed">
+            Provide details about the job you're applying for. NVIDIA AI will optimize your CV content to match this specific role.
+          </p>
+          <div className="space-y-3">
+            <Input
+              label="Target Company Name"
+              value={data.targetCompany}
+              onChange={v => updateField('targetCompany', v)}
+              placeholder="e.g. Google, Amazon, Startup Inc."
+              className="bg-white"
+            />
+            <Input
+              label="Target Role / Job Title"
+              value={data.targetRole}
+              onChange={v => updateField('targetRole', v)}
+              placeholder="e.g. Senior Frontend Engineer"
+              className="bg-white"
+            />
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Job Description / Brief</label>
+              <textarea
+                className="w-full min-h-[80px] p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm bg-white"
+                placeholder="Paste the job description or a brief summary of what they are looking for..."
+                value={data.targetJobDescription}
+                onChange={(e) => updateField('targetJobDescription', e.target.value)}
+              />
             </div>
-            <p className="text-xs text-indigo-600 mb-4 leading-relaxed">
-                Provide details about the job you're applying for. Gemini will optimize your CV content to match this specific role.
-            </p>
-            <div className="space-y-3">
-                <Input 
-                    label="Target Company Name" 
-                    value={data.targetCompany} 
-                    onChange={v => updateField('targetCompany', v)} 
-                    placeholder="e.g. Google, Amazon, Startup Inc."
-                    className="bg-white"
-                />
-                <Input 
-                    label="Target Role / Job Title" 
-                    value={data.targetRole} 
-                    onChange={v => updateField('targetRole', v)} 
-                    placeholder="e.g. Senior Frontend Engineer" 
-                    className="bg-white"
-                />
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Job Description / Brief</label>
-                    <textarea
-                        className="w-full min-h-[80px] p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm bg-white"
-                        placeholder="Paste the job description or a brief summary of what they are looking for..."
-                        value={data.targetJobDescription}
-                        onChange={(e) => updateField('targetJobDescription', e.target.value)}
-                    />
-                </div>
-            </div>
+          </div>
         </div>
       </section>
 
       {/* Personal Info */}
       <section id="form-personal" className="space-y-4 scroll-mt-20">
         <h3 className="text-xl font-bold text-gray-800 border-b pb-2">Personal Information</h3>
-        
+
         {/* Photo Upload */}
         <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
-           <div className="relative shrink-0">
-             {data.photoUrl ? (
-               <img 
-                 src={data.photoUrl} 
-                 alt="Profile" 
-                 className="w-16 h-16 rounded-full object-cover border-2 border-indigo-100" 
-               />
-             ) : (
-               <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center text-gray-400">
-                 <Upload size={24} />
-               </div>
-             )}
-             {data.photoUrl && (
-                <button 
-                  onClick={removePhoto}
-                  className="absolute -top-1 -right-1 bg-red-500 text-white p-1 rounded-full hover:bg-red-600"
-                  title="Remove photo"
-                >
-                  <Trash2 size={12} />
-                </button>
-             )}
-           </div>
-           <div className="w-full">
-             <label className="block text-sm font-medium text-gray-700 mb-1">Profile Photo</label>
-             <input
-                type="file"
-                accept="image/*"
-                onChange={handlePhotoUpload}
-                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer"
-             />
-           </div>
+          <div className="relative shrink-0">
+            {data.photoUrl ? (
+              <img
+                src={data.photoUrl}
+                alt="Profile"
+                className="w-16 h-16 rounded-full object-cover border-2 border-indigo-100"
+              />
+            ) : (
+              <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center text-gray-400">
+                <Upload size={24} />
+              </div>
+            )}
+            {data.photoUrl && (
+              <button
+                onClick={removePhoto}
+                className="absolute -top-1 -right-1 bg-red-500 text-white p-1 rounded-full hover:bg-red-600"
+                title="Remove photo"
+              >
+                <Trash2 size={12} />
+              </button>
+            )}
+          </div>
+          <div className="w-full">
+            <label className="block text-sm font-medium text-gray-700 mb-1">Profile Photo</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handlePhotoUpload}
+              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer"
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Input label="Full Name" value={data.fullName} onChange={v => updateField('fullName', v)} placeholder="John Doe" />
-          <Input label="Job Title / Headline" value={data.summary.split('.')[0] || ''} onChange={() => {}} disabled placeholder="(Auto-generated from summary)" />
+          <Input label="Job Title / Headline" value={data.headline} onChange={v => updateField('headline', v)} placeholder="e.g. Senior Software Engineer" />
           <Input label="Email" value={data.email} onChange={v => updateField('email', v)} type="email" placeholder="john@example.com" />
           <Input label="Phone" value={data.phone} onChange={v => updateField('phone', v)} type="tel" placeholder="+1 234 567 890" />
           <Input label="Location" value={data.location} onChange={v => updateField('location', v)} placeholder="New York, NY" />
@@ -250,12 +249,12 @@ export const CVForm: React.FC<CVFormProps> = ({ data, onChange, onGenerate, isGe
         </div>
         <div className="space-y-6">
           {data.experience.map((exp, index) => (
-            <div 
-              key={exp.id} 
+            <div
+              key={exp.id}
               id={`form-experience-${exp.id}`}
               className="p-4 bg-white border border-gray-200 rounded-lg shadow-sm space-y-3 relative group scroll-mt-20"
             >
-              <button 
+              <button
                 onClick={() => removeExperience(exp.id)}
                 className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors"
                 title="Remove"
@@ -297,12 +296,12 @@ export const CVForm: React.FC<CVFormProps> = ({ data, onChange, onGenerate, isGe
         </div>
         <div className="space-y-6">
           {data.education.map((edu) => (
-            <div 
-              key={edu.id} 
+            <div
+              key={edu.id}
               id={`form-education-${edu.id}`}
               className="p-4 bg-white border border-gray-200 rounded-lg shadow-sm space-y-3 relative group scroll-mt-20"
             >
-              <button 
+              <button
                 onClick={() => removeEducation(edu.id)}
                 className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors"
                 title="Remove"
@@ -317,7 +316,7 @@ export const CVForm: React.FC<CVFormProps> = ({ data, onChange, onGenerate, isGe
               </div>
             </div>
           ))}
-             {data.education.length === 0 && (
+          {data.education.length === 0 && (
             <div className="text-center py-8 text-gray-500 bg-gray-50 rounded-lg border border-dashed border-gray-300">
               No education added yet.
             </div>
@@ -337,11 +336,11 @@ export const CVForm: React.FC<CVFormProps> = ({ data, onChange, onGenerate, isGe
         </div>
         <div className="space-y-6">
           {data.awards.map((award) => (
-            <div 
-              key={award.id} 
+            <div
+              key={award.id}
               className="p-4 bg-white border border-gray-200 rounded-lg shadow-sm space-y-3 relative group"
             >
-              <button 
+              <button
                 onClick={() => removeAward(award.id)}
                 className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors"
                 title="Remove"
@@ -353,7 +352,7 @@ export const CVForm: React.FC<CVFormProps> = ({ data, onChange, onGenerate, isGe
                 <Input label="Issuer / Organization" value={award.issuer} onChange={v => updateAward(award.id, 'issuer', v)} placeholder="e.g. Company Inc." />
                 <Input label="Date" value={award.date} onChange={v => updateAward(award.id, 'date', v)} placeholder="Jun 2023" />
               </div>
-               <div>
+              <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Description (Optional)</label>
                 <textarea
                   className="w-full min-h-[60px] p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm"
@@ -364,7 +363,7 @@ export const CVForm: React.FC<CVFormProps> = ({ data, onChange, onGenerate, isGe
               </div>
             </div>
           ))}
-           {data.awards.length === 0 && (
+          {data.awards.length === 0 && (
             <div className="text-center py-8 text-gray-500 bg-gray-50 rounded-lg border border-dashed border-gray-300">
               No awards added yet.
             </div>
@@ -384,11 +383,11 @@ export const CVForm: React.FC<CVFormProps> = ({ data, onChange, onGenerate, isGe
         </div>
         <div className="space-y-6">
           {data.memberships.map((membership) => (
-            <div 
-              key={membership.id} 
+            <div
+              key={membership.id}
               className="p-4 bg-white border border-gray-200 rounded-lg shadow-sm space-y-3 relative group"
             >
-              <button 
+              <button
                 onClick={() => removeMembership(membership.id)}
                 className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors"
                 title="Remove"
@@ -402,7 +401,7 @@ export const CVForm: React.FC<CVFormProps> = ({ data, onChange, onGenerate, isGe
               </div>
             </div>
           ))}
-           {data.memberships.length === 0 && (
+          {data.memberships.length === 0 && (
             <div className="text-center py-8 text-gray-500 bg-gray-50 rounded-lg border border-dashed border-gray-300">
               No memberships added yet.
             </div>
@@ -425,7 +424,7 @@ export const CVForm: React.FC<CVFormProps> = ({ data, onChange, onGenerate, isGe
 
         <section id="form-interests" className="space-y-4">
           <h3 className="text-xl font-bold text-gray-800 border-b pb-2 flex items-center gap-2">
-             Interests <Heart size={16} className="text-gray-400" />
+            Interests <Heart size={16} className="text-gray-400" />
           </h3>
           <textarea
             className="w-full min-h-[100px] p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
